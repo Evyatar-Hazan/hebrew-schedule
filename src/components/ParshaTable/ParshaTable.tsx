@@ -27,7 +27,7 @@ const ParshaTable: React.FC<ParshaTableProps> = ({ date }) => {
     };
 
     loadData();
-  }, []);
+  }, [date]);
 
   if (loading) return <p>טוען נתונים...</p>;
   if (error) return <p>שגיאה: {error}</p>;
