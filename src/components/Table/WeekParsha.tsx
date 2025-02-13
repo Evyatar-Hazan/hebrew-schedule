@@ -39,7 +39,6 @@ export const DataDey: React.FC<DataDeyProps> = ({ date, dailyPage, haftara }) =>
       height: '250px',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap', 
       wordBreak: 'break-word',
       }}>
       <div>
