@@ -40,8 +40,9 @@ const ParshaTable: React.FC<ParshaTableProps> = ({ date }) => {
   const timesData = [
           { title: "סוף זמן קריאת שמע של שחרית", minutes: new Date(candleLighting).getMinutes(), hours: new Date(candleLighting).getHours() },
           { title: 'נעילת חניות עש״ק', minutes: new Date(storeLock).getMinutes(), hours: new Date(storeLock).getHours() },
+          { title: 'הדלקת נרות בערש״ק', minutes: new Date(candleLighting).getMinutes(), hours: new Date(candleLighting).getHours() },
           { title: "זמן מוצאי שבת", minutes: new Date(havdala).getMinutes(), hours: new Date(havdala).getHours() },
-          { title: "לפי רבינו ת״ם", minutes: new Date(havdala).getMinutes(), hours: new Date(havdala).getHours() },
+          { title: "לפי ר״ת", minutes: new Date(havdala).getMinutes(), hours: new Date(havdala).getHours() },
         ];
   const time = [
     ["לוח זמנים", "דקות", "שעות"],

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 
 interface WeekParshaProps {
@@ -24,12 +24,23 @@ export const WeekParsha: React.FC<WeekParshaProps> = ({ title, parsha }) => {
 };
  
 export const DataDey: React.FC<DataDeyProps> = ({ date, dailyPage, haftara }) => {
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div>
-    <div>
-      <p>{date}</p>
-      <p>{dailyPage}</p>
-    </div>
+    <div style={{
+      width: `${windowWidth / 6}px`,
+      height: '250px'}}>
+      <div>
+        <p>{date}</p>
+        <p>{dailyPage}</p>
+      </div>
       <div>
         <p>{"מפטירים בנביא"}</p>
         <p>{haftara}</p>
