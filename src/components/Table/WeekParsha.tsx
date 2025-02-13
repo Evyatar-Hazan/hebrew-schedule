@@ -35,11 +35,11 @@ export const DataDey: React.FC<DataDeyProps> = ({ date, dailyPage, haftara }) =>
 
   return (
     <div style={{
-      width: `${windowWidth / 6}px`,
-      height: '250px',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      wordBreak: 'break-word',
+      // width: `${windowWidth / 6}px`,
+      // height: '250px',
+      // overflow: 'hidden',
+      // textOverflow: 'ellipsis',
+      // wordBreak: 'break-word',
       }}>
       <div>
         <p>{date}</p>

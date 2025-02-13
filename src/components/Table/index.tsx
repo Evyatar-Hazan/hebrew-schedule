@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 
 interface TableProps {
+  className?: string;
   content: (React.ReactNode | { content: React.ReactNode;})[][];
 }
 
@@ -31,9 +32,9 @@ const TableCell: React.FC<CellProps> = ({ cell }) => {
   return <td style={{ border: '1px solid black', padding: '8px' }}>{cell}</td>;
 };
 
-const Table: React.FC<TableProps> = ({ content }) => {
+const Table: React.FC<TableProps> = ({ content, className }) => {
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse', direction: 'rtl',  }}>
+    <table className={className} style={{ width: '100%', borderCollapse: 'collapse', direction: 'rtl' }}>
       <tbody >
         {content.map((row, rowIndex) => (
           <tr key={rowIndex}>

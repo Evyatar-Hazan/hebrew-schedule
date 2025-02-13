@@ -52,7 +52,7 @@ const ParshaTable: React.FC<ParshaTableProps> = ({ date }) => {
   const tableContent = [
     [<WeekParsha title='יום שישי עש"ק פרשת' parsha={parasha} />,],
     [<DataDey date={hebrewDate} dailyPage={dafyomi} haftara={haftarah} />, ],
-    [{ content: <Table content={time} /> }],
+    [{ content: <Table content={time} className="inner-table-wrapper" /> }],
     [<Note />],
   ];
 
