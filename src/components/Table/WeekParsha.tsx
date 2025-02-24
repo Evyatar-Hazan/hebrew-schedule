@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-
+import React from "react";
 
 interface WeekParshaProps {
   title: string;
-  parsha: string;
+  parsha?: string;
 }
 interface NoteProps {
   text?: string;
@@ -13,57 +12,42 @@ interface DataDeyProps {
   dailyPage: string;
   haftara: string;
 }
-  
-export const WeekParsha: React.FC<WeekParshaProps> = ({ title, parsha }) => {
-  return (
+
+export const WeekParsha: React.FC<WeekParshaProps> = ({
+  title,
+  parsha = "",
+}) => (
+  <div>
+    <p>{title}</p>
+    <h1>{parsha}</h1>
+  </div>
+);
+
+export const DataDey: React.FC<DataDeyProps> = ({
+  date,
+  dailyPage,
+  haftara,
+}) => (
+  <div>
     <div>
-      <p>{title}</p>
-      <h1>{parsha}</h1>
+      <p>{date}</p>
+      <p>{dailyPage}</p>
     </div>
-  );
-};
- 
-export const DataDey: React.FC<DataDeyProps> = ({ date, dailyPage, haftara }) => {
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return (
-    <div style={{
-      // width: `${windowWidth / 6}px`,
-      // height: '250px',
-      // overflow: 'hidden',
-      // textOverflow: 'ellipsis',
-      // wordBreak: 'break-word',
-      }}>
-      <div>
-        <p>{date}</p>
-        <p>{dailyPage}</p>
-      </div>
-      <div>
-        <p>{"מפטירים בנביא"}</p>
-        <p>{haftara}</p>
-      </div>
-    </div>
-  );
-};
- 
-export const times= (text: string, minutes: string, hours: string ) => {
-  return [
-    <p>{text}</p>,
-    <p>{minutes}</p>,
-    <p>{hours}</p>,]
-};
- 
-export const Note: React.FC<NoteProps> = ({ text=""}) => {
-  return (
     <div>
-        <p>{text}</p>
+      <p>{"מפטירים בנביא"}</p>
+      <p>{haftara}</p>
     </div>
-  );
-};
+  </div>
+);
+
+export const times = (text: string, minutes: string, hours: string) => [
+  <p key="text">{text}</p>,
+  <p key="minutes">{minutes}</p>,
+  <p key="hours">{hours}</p>,
+];
+
+export const Note: React.FC<NoteProps> = ({ text = "" }) => (
+  <div>
+    <p>{text}</p>
+  </div>
+);

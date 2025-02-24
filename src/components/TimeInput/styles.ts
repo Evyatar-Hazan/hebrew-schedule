@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const InputContainer = styled.div`
   display: flex;
@@ -18,7 +18,6 @@ export const Input = styled.input`
   border-radius: 4px;
   font-size: 14px;
   text-align: center;
-  
   &:focus {
     outline: none;
     border-color: #666;

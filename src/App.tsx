@@ -1,8 +1,8 @@
-import React from 'react';
-import { GlobalStyle } from './styles/globalStyles';
-import GlobalParshaTable from './components/ParshaTable';
+import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { useRef } from "react";
+
+import GlobalParshaTable from "./components/ParshaTable";
+import { GlobalStyle } from "./styles/globalStyles";
 
 const App: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -10,11 +10,10 @@ const App: React.FC = () => {
 
   return (
     <>
-    <button onClick={() => reactToPrintFn()}>Print</button>
+      <button onClick={() => reactToPrintFn()}>Print</button>
       <GlobalStyle />
-<div ref={contentRef} className="print-content">
-
-    <GlobalParshaTable />
+      <div ref={contentRef} className="print-content">
+        <GlobalParshaTable />
       </div>
     </>
   );

@@ -1,5 +1,6 @@
-import React from 'react';
-import { InputContainer, Label, Input } from './styles';
+import React from "react";
+
+import { Input, InputContainer, Label } from "./styles";
 
 interface Props {
   label: string;
@@ -7,15 +8,13 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-export const TimeInput: React.FC<Props> = ({ label, value, onChange }) => {
-  return (
-    <InputContainer>
-      <Label>{label}</Label>
-      <Input
-        type="time"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </InputContainer>
-  );
-};
+export const TimeInput: React.FC<Props> = ({ label, value, onChange }) => (
+  <InputContainer>
+    <Label>{label}</Label>
+    <Input
+      type="time"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  </InputContainer>
+);

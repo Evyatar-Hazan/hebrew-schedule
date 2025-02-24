@@ -1,7 +1,8 @@
+import "react-datepicker/dist/react-datepicker.css";
+
+import { he } from "date-fns/locale"; // ייבוא עברית
 import React, { useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { he } from "date-fns/locale"; // ייבוא עברית
 
 // רישום עברית כסביבה לשימוש
 registerLocale("he", he);
@@ -11,7 +12,10 @@ interface DatePickerButtonProps {
   selectedDates?: string;
 }
 
-const DatePickerButton: React.FC<DatePickerButtonProps> = ({ onDateSelect, selectedDates }) => {
+const DatePickerButton: React.FC<DatePickerButtonProps> = ({
+  onDateSelect,
+  selectedDates,
+}) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const handleDateChange = (date: Date | null) => {
@@ -22,12 +26,14 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({ onDateSelect, selec
   };
 
   return (
-    <div className="relative inline-block" dir="rtl" style={{flex: 1}}>
+    <div className="relative inline-block" dir="rtl" style={{ flex: 1 }}>
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}
         dateFormat="dd/MM/yyyy"
-        placeholderText={selectedDates ? selectedDates : "📅 בחר תאריך"}
+        placeholderText={
+          selectedDates !== undefined ? selectedDates : "📅 בחר תאריך"
+        }
         locale="he"
         className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 cursor-pointer"
       />
