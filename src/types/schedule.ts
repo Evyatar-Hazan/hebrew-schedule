@@ -21,3 +21,25 @@ export interface DaySchedule {
     rtTime: TimeData;
   };
 }
+
+export type ContentProps = {
+  subTitle: string;
+  data: string;
+  subTable: {
+    columns: {
+      header: string;
+      accessor: string;
+    }[];
+    rowData: Record<string, string>[];
+  };
+  subFooter: string;
+  selectDate?: string;
+};
+
+export type TableProps = {
+  data: {
+    header: string;
+    content: ContentProps[];
+    footer: string;
+  }[];
+};
