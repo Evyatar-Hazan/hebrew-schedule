@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface TimeData {
   hour: string;
   minute: string;
@@ -36,10 +38,41 @@ export type ContentProps = {
   selectDate?: string;
 };
 
+export type UpdateDataProps = (
+  id: string,
+  newData: string,
+  isSubTable: boolean,
+  isContent: boolean,
+  index?: number,
+  subTableRowIndex?: number,
+  subTableKey?: string,
+) => void;
+
 export type TableProps = {
   data: {
     header: string;
     content: ContentProps[];
     footer: string;
   }[];
+};
+
+export type TableComponentProps = {
+  data: TableProps["data"];
+  updateData: UpdateDataProps;
+};
+
+export type RowData = Record<string, string>;
+
+export type SubTableProps = {
+  tableIndex: number;
+  columns: { accessor: string; header: string }[];
+  data: RowData[];
+  updateData: UpdateDataProps;
+};
+
+export type IsInputProps = {
+  component: ReactNode;
+  value: string;
+  componentStyle: string;
+  onSave: (newValue: string) => void;
 };
