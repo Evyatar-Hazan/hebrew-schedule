@@ -18,20 +18,17 @@ export const TableHeader = styled.thead`
 
 export const TableRow = styled.tr<{ isEven?: boolean }>`
   border: 2px solid black;
-  // display: flex;
 `;
 
-export const TableCellStyle = `
+export const TableCell = styled.td`
   border: 2px solid black;
   padding: 1rem;
   text-align: center;
   cursor: pointer;
   word-wrap: break-word;
   white-space: normal;
-`;
-
-export const TableCell = styled.td`
-  ${TableCellStyle}
+  word-break: break-word;
+  overflow-wrap: break-word;
 `;
 
 export const HeaderCellStyle = `
@@ -83,7 +80,7 @@ export const NoDataText = styled.p`
   font-size: 1rem;
 `;
 
-export const FooterStyle = `
+export const Footer = styled.div`
   font-size: 1.5rem;
   padding: 1rem;
   font-weight: bold;
@@ -91,21 +88,13 @@ export const FooterStyle = `
   border: 2px solid black;
 `;
 
-export const Footer = styled.div`
-  ${FooterStyle}
-`;
-
-export const SubFooterStyle = `
+export const SubFooter = styled.div`
   font-size: 1.5rem;
   padding: 1rem;
   font-weight: bold;
   text-align: center;
   border-left: 2px solid black;
   border-right: 2px solid black;
-`;
-
-export const SubFooter = styled.div`
-  ${SubFooterStyle}
 `;
 
 export const StyledDiv = styled.div<{ componentStyle: string }>`

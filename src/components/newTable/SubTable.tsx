@@ -1,5 +1,5 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import type { SubTableProps } from "../../types/schedule";
 import * as styled from "./styled";
@@ -10,11 +10,7 @@ const SubTable: React.FC<SubTableProps> = ({
   updateData,
   tableIndex,
 }) => {
-  const [editingCell, setEditingCell] = useState<{
-    rowIndex: number;
-    columnId: string;
-  } | null>(null);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [rowHeights, setRowHeights] = useState<Record<number, number>>({});
 
   const table = useReactTable({
     columns,
@@ -23,32 +19,46 @@ const SubTable: React.FC<SubTableProps> = ({
     enableColumnResizing: true,
   });
 
-  const handleCellClick = (
+  useEffect(() => {
+    const initialHeights: Record<number, number> = {};
+    table.getRowModel().rows.forEach((row, rowIndex) => {
+      initialHeights[rowIndex] =
+        document.getElementById(`row-${rowIndex}`)?.offsetHeight ?? 0;
+    });
+    setRowHeights(initialHeights);
+  }, [data, table]);
+
+  const handleCellBlur = (
     rowIndex: number,
     columnId: string,
     value: string,
+    cell: HTMLTableCellElement,
   ) => {
-    setEditingCell({ rowIndex, columnId });
-    setInputValue(value);
+    updateData("value", value, true, true, tableIndex, rowIndex, columnId);
+
+    const newHeight = cell.scrollHeight;
+    setRowHeights((prev) => ({
+      ...prev,
+      [rowIndex]: newHeight,
+    }));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
+  const handleCellClick = (
+    e: React.MouseEvent<HTMLTableCellElement>,
+    rowIndex: number,
+    columnId: string,
+  ) => {
+    const target = e.currentTarget;
+    target.contentEditable = "true";
+    target.focus();
 
-  const handleInputBlur = () => {
-    if (editingCell) {
-      updateData(
-        "value",
-        inputValue,
-        true,
-        true,
-        tableIndex,
-        editingCell.rowIndex,
-        editingCell.columnId,
-      );
-      setEditingCell(null);
-    }
+    const handleBlur = () => {
+      handleCellBlur(rowIndex, columnId, target.textContent ?? "", target);
+      target.contentEditable = "false";
+      target.removeEventListener("blur", handleBlur);
+    };
+
+    target.addEventListener("blur", handleBlur);
   };
 
   if (data.length === 0) {
@@ -61,7 +71,7 @@ const SubTable: React.FC<SubTableProps> = ({
         {table.getHeaderGroups().map((headerGroup) => (
           <styled.TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
-              const text = (header.column.columnDef as never)["accessor"] ?? "";
+              const text = header.column.id;
               return (
                 <styled.HeaderCell key={header.id}>{text}</styled.HeaderCell>
               );
@@ -71,35 +81,23 @@ const SubTable: React.FC<SubTableProps> = ({
       </styled.TableHeader>
       <tbody>
         {table.getRowModel().rows.map((row, rowIndex) => (
-          <styled.TableRow key={row.id}>
-            {row.getVisibleCells().map((cell) => {
-              const isEditing =
-                editingCell?.rowIndex === rowIndex &&
-                editingCell.columnId === cell.column.id;
-              return (
-                <styled.TableCell
-                  key={cell.id}
-                  onClick={() =>
-                    handleCellClick(
-                      rowIndex,
-                      cell.column.id,
-                      row.original[cell.column.id],
-                    )
-                  }
-                >
-                  {isEditing ? (
-                    <styled.Input
-                      value={inputValue}
-                      onChange={handleInputChange}
-                      onBlur={handleInputBlur}
-                      autoFocus
-                    />
-                  ) : (
-                    row.original[cell.column.id]
-                  )}
-                </styled.TableCell>
-              );
-            })}
+          <styled.TableRow
+            key={row.id}
+            id={`row-${rowIndex}`}
+            style={{
+              height: rowHeights[rowIndex]
+                ? `${rowHeights[rowIndex]}px`
+                : "auto",
+            }}
+          >
+            {row.getVisibleCells().map((cell) => (
+              <styled.TableCell
+                key={cell.id}
+                onClick={(e) => handleCellClick(e, rowIndex, cell.column.id)}
+              >
+                {row.original[cell.column.id]}
+              </styled.TableCell>
+            ))}
           </styled.TableRow>
         ))}
       </tbody>
