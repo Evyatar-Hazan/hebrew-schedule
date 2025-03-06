@@ -120,7 +120,7 @@ export default [
       'no-use-before-define': 'off',
       'no-nested-ternary': 'warn',
       'max-lines': ['error', { max: 300, skipComments: true }],
-      'max-params': ['warn', { max: 6 }],
+      'max-params': ['warn', { max: 8 }],
       'no-else-return': 'warn',
       'no-param-reassign': 'warn',
       'no-throw-literal': 'warn',

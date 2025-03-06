@@ -21,7 +21,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     if (date) {
-      onDateSelect(date.toISOString().split("T")[0]); // מחזיר תאריך בפורמט YYYY-MM-DD
+      onDateSelect(date.toISOString().split("T")[0]);
     }
   };
 
