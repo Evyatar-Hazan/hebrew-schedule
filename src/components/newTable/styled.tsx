@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
-export const TableWrapper = styled.div`
-  display: flex;
-  justify-content: row-reverse;
-  align-items: center;
+export const TableWrapper = styled.table`
+  border-collapse: collapse;
+  table-layout: auto;
 `;
 
 export const StyledTable = styled.table`
@@ -47,6 +46,7 @@ export const SectionHeaderStyle = `
   font-weight: bold;
   text-align: center;
   border: 2px solid black;
+  border-collapse: collapse;
 `;
 
 export const SectionHeader = styled.div`
@@ -86,6 +86,7 @@ export const Footer = styled.div`
   font-weight: bold;
   text-align: center;
   border: 2px solid black;
+  font-size: 1.25rem;
 `;
 
 export const SubFooter = styled.div`
@@ -93,8 +94,7 @@ export const SubFooter = styled.div`
   padding: 1rem;
   font-weight: bold;
   text-align: center;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
+  border: 2px solid black;
 `;
 
 export const StyledDiv = styled.div<{ componentStyle: string }>`

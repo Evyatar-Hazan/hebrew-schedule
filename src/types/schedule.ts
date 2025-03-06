@@ -59,6 +59,7 @@ export type TableProps = {
 export type TableComponentProps = {
   data: TableProps["data"];
   updateData: UpdateDataProps;
+  onLoadData: (date: string, index?: number) => void;
 };
 
 export type RowData = Record<string, string>;

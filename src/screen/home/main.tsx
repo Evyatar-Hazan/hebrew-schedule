@@ -12,7 +12,6 @@ import type {
 const HomeScreen = () => {
   const [data, setData] = useState<TableProps["data"]>([]);
   const [content, setContent] = useState<ContentProps[]>([]);
-  const [selectedDates, setSelectedDates] = useState<string[]>([]);
 
   const updateData: UpdateDataProps = (
     id,
@@ -24,138 +23,76 @@ const HomeScreen = () => {
     subTableKey,
   ) => {
     if (isContent) {
-      setContent((prevContent) => {
-        const updatedContent = [...prevContent];
-        if (
-          isSubTable &&
-          index !== undefined &&
-          subTableRowIndex !== undefined &&
-          subTableKey
-        ) {
-          if (id === "headerSubTable") {
-            updatedContent[index].subTable.columns[subTableRowIndex].accessor =
-              updatedContent[index].subTable.columns[subTableRowIndex]
-                .header === subTableKey
-                ? newData
-                : updatedContent[index].subTable.columns[subTableRowIndex]
-                    .accessor;
+      setContent((prevContent) =>
+        prevContent.map((item, i) => {
+          if (i !== index) {
+            return item;
+          }
+          if (
+            isSubTable &&
+            subTableRowIndex !== undefined &&
+            subTableKey !== undefined &&
+            subTableKey !== ""
+          ) {
+            if (id === "headerSubTable") {
+              item.subTable.columns[subTableRowIndex].accessor =
+                item.subTable.columns[subTableRowIndex].header === subTableKey
+                  ? newData
+                  : item.subTable.columns[subTableRowIndex].accessor;
+            } else {
+              item.subTable.rowData[subTableRowIndex][subTableKey] = newData;
+            }
           } else {
-
-            updatedContent[index].subTable.rowData[subTableRowIndex][
-              subTableKey
-            ] = newData;
+            (item as Record<string, unknown>)[id] = newData;
           }
-        } else if (index !== undefined) {
-          if (id in updatedContent[index]) {
-            (updatedContent[index] as Record<string, unknown>)[id] = newData;
-          }
-        }
-        return updatedContent;
-      });
+          return item;
+        }),
+      );
     } else {
-      setData((prevData) => {
-        const updatedData = [...prevData];
-
-        if (index !== undefined && id in updatedData[index]) {
-          const key = id as keyof (typeof updatedData)[number];
-
-          if (typeof updatedData[index][key] === "string") {
-            (updatedData[index][key] as string) = newData;
-          }
-        }
-
-        return updatedData;
-      });
+      setData((prevData) =>
+        prevData.map((item, i) =>
+          i === index ? { ...item, [id]: newData } : item,
+        ),
+      );
     }
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      const newData: TableProps = {
-        data: [
-          {
-            header: "להצלחת הנדיב החפץ בעילום שמו",
-            content: content,
-            footer: "",
-          },
-        ],
-      };
-      setData(newData.data);
-    };
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content]);
+  const loadData = async (date: string, index?: number) => {
+    const result = await getData(date);
+    result.selectDate = date;
+    setContent((prevContent) =>
+      index !== undefined
+        ? prevContent.map((item, i) => (i === index ? result : item))
+        : [...prevContent, result],
+    );
+  };
 
   useEffect(() => {
-    const loadContent = async (date: string) => {
-      const result = await getData(date);
-      result.selectDate = date;
-      const result1 = await getData("2021-10-11");
-      result1.selectDate = date;
-      const result2 = await getData("2021-10-12");
-      result2.selectDate = date;
-      setContent([...content, result, result1, result2]);
+    const initializeData = () => {
+      setData([
+        {
+          header: "להצלחת הנדיב החפץ בעילום שמו",
+          content: content,
+          footer: "",
+        },
+      ]);
     };
-    loadContent("2021-09-10");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    initializeData();
+  }, [content]);
 
   return (
     <>
-      <TableComponent data={data} updateData={updateData} />
-      <button
-        onClick={() =>
-          updateData(
-            "header",
-            Math.random().toString(),
-            false,
-            false,
-            0,
-            undefined,
-            undefined,
-          )
-        }
-      >
-        1111
-      </button>
-      <button
-        onClick={() =>
-          updateData(
-            "subTitle",
-            Math.random().toString(),
-            false,
-            true,
-            0,
-            undefined,
-            undefined,
-          )
-        }
-      >
-        2222
-      </button>
-      <button
-        onClick={() =>
-          updateData(
-            "value",
-            Math.random().toString(),
-            true,
-            true,
-            2,
-            1,
-            "schedule",
-          )
-        }
-      >
-        3333
-      </button>
-      {/* <DatePickerButton
+      {content.length > 0 && (
+        <TableComponent
+          data={data}
+          updateData={updateData}
+          onLoadData={loadData}
+        />
+      )}
+      <DatePickerButton
         key="new-date-picker-button"
-        onDateSelect={(newDates) => {
-          setSelectedDates(newDates);
-          loadContent(newDates[newDates.length - 1]);
-        }}
-        selectedDates={selectedDates}
-      /> */}
+        onDateSelect={(newDates) => loadData(newDates)}
+      />
     </>
   );
 };

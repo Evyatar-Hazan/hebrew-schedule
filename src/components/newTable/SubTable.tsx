@@ -71,7 +71,10 @@ const SubTable: React.FC<SubTableProps> = ({
         {table.getHeaderGroups().map((headerGroup) => (
           <styled.TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
-              const text = header.column.id;
+              const accessor = (
+                header.column.columnDef as { accessor?: string }
+              ).accessor;
+              const text = accessor !== undefined ? accessor.toString() : "";
               return (
                 <styled.HeaderCell key={header.id}>{text}</styled.HeaderCell>
               );

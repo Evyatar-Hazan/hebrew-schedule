@@ -8,12 +8,14 @@ import React, { useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import type { TableComponentProps, TableProps } from "../../types/schedule";
+import DatePickerButton from "../ParshaTable/DatePickerButton";
 import * as styled from "./styled";
 import SubTable from "./SubTable";
 
 const TableComponent: React.FC<TableComponentProps> = ({
   data,
   updateData,
+  onLoadData,
 }) => {
   const columns = useMemo<ColumnDef<TableProps["data"][number]>[]>(
     () => [
@@ -29,6 +31,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   subTitle,
                   data: contentData,
                   subFooter,
+                  selectDate,
                   subTable,
                 } = contentItem;
 
@@ -88,6 +91,13 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     >
                       {subFooter}
                     </styled.SubFooter>
+                    <styled.SubFooter>
+                      <DatePickerButton
+                        key={selectDate}
+                        onDateSelect={(newDates) => onLoadData(newDates, index)}
+                        selectedDates={selectDate}
+                      />
+                    </styled.SubFooter>
                   </div>
                 );
               })}
@@ -95,29 +105,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
           );
         },
       },
-      {
-        accessorKey: "footer",
-        header: "Footer",
-        cell: ({ row }) => (
-          <styled.Footer
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={(e) =>
-              updateData(
-                "footer",
-                e.currentTarget.textContent ?? "",
-                false,
-                false,
-                row.index,
-              )
-            }
-          >
-            {row.original.footer}
-          </styled.Footer>
-        ),
-      },
     ],
-    [updateData],
+    [onLoadData, updateData],
   );
 
   const table = useReactTable({
@@ -157,6 +146,22 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </tr>
           ))}
         </tbody>
+        <footer>
+          <styled.Footer
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) =>
+              updateData(
+                "footer",
+                e.currentTarget.textContent ?? "",
+                false,
+                false,
+              )
+            }
+          >
+            {data[0]?.footer}
+          </styled.Footer>
+        </footer>
       </table>
     </styled.TableWrapper>
   );
