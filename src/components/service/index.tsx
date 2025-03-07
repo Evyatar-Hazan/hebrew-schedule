@@ -30,7 +30,7 @@ const getData = async (date: string): Promise<ContentProps> => {
     } = result;
     data = {
       subTitle: `יום שישי עש"ק פרשת ${parasha}`,
-      data: `${dafyomi} \n מפטירים בנביא ${haftarah}`,
+      data: `${hebrewDate} \n${dafyomi} \n מפטירים בנביא ${haftarah}`,
       subTable: {
         columns: [
           { header: "schedule", accessor: "לוח זמנים" },
@@ -54,7 +54,7 @@ const getData = async (date: string): Promise<ContentProps> => {
       subFooter: "",
     };
   } catch (err) {
-    console.log("🚀 ~ getData ~ err:", err);
+    /* empty */
   }
   return data;
 };

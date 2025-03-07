@@ -43,6 +43,7 @@ const ParshaTable: React.FC<ParshaTableProps> = ({ date }) => {
   const {
     parasha: parashaData,
     dafyomi,
+    hebrewDate,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     haftarah,
     candleLighting,
