@@ -28,6 +28,7 @@ export const TableCell = styled.td`
   white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
+  white-space: pre-line;
 `;
 
 export const HeaderCellStyle = `
@@ -40,20 +41,17 @@ export const HeaderCell = styled.th`
   ${HeaderCellStyle}
 `;
 
-export const SectionHeaderStyle = `
+export const SectionHeader = styled.div`
   font-size: 1.5rem;
   padding: 1rem;
   font-weight: bold;
   text-align: center;
   border: 2px solid black;
   border-collapse: collapse;
+  white-space: pre-line;
 `;
 
-export const SectionHeader = styled.div`
-  ${SectionHeaderStyle}
-`;
-
-export const SubTitleStyle = `
+export const SubTitle = styled.div`
   font-size: 1.25rem;
   padding: 1rem;
   font-weight: 600;
@@ -62,10 +60,7 @@ export const SubTitleStyle = `
   cursor: pointer;
   word-wrap: break-word;
   white-space: normal;
-`;
-
-export const SubTitle = styled.div`
-  ${SubTitleStyle}
+  white-space: pre-line;
 `;
 
 export const SectionWrapper = styled.div`
@@ -95,6 +90,7 @@ export const SubFooter = styled.div`
   font-weight: bold;
   text-align: center;
   border: 2px solid black;
+  white-space: pre-line;
 `;
 
 export const StyledDiv = styled.div<{ componentStyle: string }>`

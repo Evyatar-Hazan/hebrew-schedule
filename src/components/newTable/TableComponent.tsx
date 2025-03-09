@@ -12,6 +12,29 @@ import DatePickerButton from "../ParshaTable/DatePickerButton";
 import * as styled from "./styled";
 import SubTable from "./SubTable";
 
+const getTextWithNewLines = (html: string) =>
+  html
+    .replace(/<div>/g, "\n")
+    .replace(/<\/div>/g, "")
+    .replace(/<br>/g, "\n")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+
+const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.execCommand("insertLineBreak");
+  }
+};
+
+const renderTextWithLineBreaks = (text: string) =>
+  text.split("\n").map((line) => (
+    <React.Fragment key={uuidv4()}>
+      {line}
+      <br />
+    </React.Fragment>
+  ));
+
 const TableComponent: React.FC<TableComponentProps> = ({
   data,
   updateData,
@@ -40,57 +63,73 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     <styled.SubTitle
                       contentEditable
                       suppressContentEditableWarning
-                      onBlur={(e) =>
+                      onKeyDown={handleKeyDown}
+                      onBlur={(e) => {
+                        const cleanedText = getTextWithNewLines(
+                          e.currentTarget.innerHTML,
+                        );
                         updateData(
                           "subTitle",
-                          e.currentTarget.textContent ?? "",
+                          cleanedText,
                           false,
                           true,
                           index,
                           row.index,
-                        )
-                      }
+                        );
+                      }}
                     >
-                      {subTitle}
+                      {renderTextWithLineBreaks(subTitle)}
                     </styled.SubTitle>
+
                     <styled.SubTitle
                       contentEditable
                       suppressContentEditableWarning
-                      onBlur={(e) =>
+                      onKeyDown={handleKeyDown}
+                      onBlur={(e) => {
+                        const cleanedText = getTextWithNewLines(
+                          e.currentTarget.innerHTML,
+                        );
                         updateData(
                           "data",
-                          e.currentTarget.textContent ?? "",
+                          cleanedText,
                           false,
                           true,
                           index,
                           row.index,
-                        )
-                      }
+                        );
+                      }}
                     >
-                      {contentData}
+                      {renderTextWithLineBreaks(contentData)}
                     </styled.SubTitle>
+
                     <SubTable
                       tableIndex={index}
                       updateData={updateData}
                       columns={subTable.columns}
                       data={subTable.rowData}
                     />
+
                     <styled.SubFooter
                       contentEditable
                       suppressContentEditableWarning
-                      onBlur={(e) =>
+                      onKeyDown={handleKeyDown}
+                      onBlur={(e) => {
+                        const cleanedText = getTextWithNewLines(
+                          e.currentTarget.innerHTML,
+                        );
                         updateData(
                           "subFooter",
-                          e.currentTarget.textContent ?? "",
+                          cleanedText,
                           false,
                           true,
                           index,
                           row.index,
-                        )
-                      }
+                        );
+                      }}
                     >
-                      {subFooter}
+                      {renderTextWithLineBreaks(subFooter)}
                     </styled.SubFooter>
+
                     <styled.SubFooter>
                       <DatePickerButton
                         key={selectDate}
@@ -120,21 +159,21 @@ const TableComponent: React.FC<TableComponentProps> = ({
       <table>
         <thead>
           <styled.SectionHeader
+            key={data[0]?.header || "default-key"}
             contentEditable
             suppressContentEditableWarning
-            onBlur={(e) =>
-              updateData(
-                "header",
-                e.currentTarget.textContent ?? "",
-                false,
-                false,
-                0,
-              )
-            }
+            onKeyDown={handleKeyDown}
+            onBlur={(e) => {
+              const cleanedText = getTextWithNewLines(
+                e.currentTarget.innerHTML,
+              );
+              updateData("header", cleanedText, false, false, 0);
+            }}
           >
-            {data[0]?.header}
+            {renderTextWithLineBreaks(data[0]?.header || "")}
           </styled.SectionHeader>
         </thead>
+
         <tbody>
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
@@ -146,20 +185,20 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </tr>
           ))}
         </tbody>
+
         <footer>
           <styled.Footer
             contentEditable
             suppressContentEditableWarning
-            onBlur={(e) =>
-              updateData(
-                "footer",
-                e.currentTarget.textContent ?? "",
-                false,
-                false,
-              )
-            }
+            onKeyDown={handleKeyDown}
+            onBlur={(e) => {
+              const cleanedText = getTextWithNewLines(
+                e.currentTarget.innerHTML,
+              );
+              updateData("footer", cleanedText, false, false);
+            }}
           >
-            {data[0]?.footer}
+            {renderTextWithLineBreaks(data[0]?.footer || "")}
           </styled.Footer>
         </footer>
       </table>

@@ -53,6 +53,7 @@ export type TableProps = {
     header: string;
     content: ContentProps[];
     footer: string;
+    [key: string]: string | ContentProps[];
   }[];
 };
 
