@@ -11,7 +11,7 @@ import { flushSync } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
 
 import type { TableComponentProps, TableProps } from "../../types/schedule";
-import DatePickerButton from "../ParshaTable/DatePickerButton";
+import DatePickerButton from "../datePicker/DatePickerButton";
 import * as styled from "./styled";
 import SubTable from "./SubTable";
 

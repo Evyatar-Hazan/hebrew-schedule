@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import TableComponent from "../../components/newTable/TableComponent";
-import DatePickerButton from "../../components/ParshaTable/DatePickerButton";
+import DatePickerButton from "../../components/datePicker/DatePickerButton";
 import getData from "../../components/service";
+import TableComponent from "../../components/Table/TableComponent";
 import type {
   ContentProps,
   TableProps,
