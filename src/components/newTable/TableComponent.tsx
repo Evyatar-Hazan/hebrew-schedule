@@ -4,7 +4,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useMemo } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import React, { useMemo, useRef } from "react";
+import { flushSync } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
 
 import type { TableComponentProps, TableProps } from "../../types/schedule";
@@ -40,6 +43,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
   updateData,
   onLoadData,
 }) => {
+  const [isPrint, setIsPrint] = React.useState(false);
+  const tableRef = useRef<HTMLTableElement>(null);
+
   const columns = useMemo<ColumnDef<TableProps["data"][number]>[]>(
     () => [
       {
@@ -130,7 +136,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       {renderTextWithLineBreaks(subFooter)}
                     </styled.SubFooter>
 
-                    <styled.SubFooter>
+                    <styled.SubFooter
+                      style={{ display: isPrint ? "none" : "black" }}
+                    >
                       <DatePickerButton
                         key={selectDate}
                         onDateSelect={(newDates) => onLoadData(newDates, index)}
@@ -145,8 +153,41 @@ const TableComponent: React.FC<TableComponentProps> = ({
         },
       },
     ],
-    [onLoadData, updateData],
+    [isPrint, onLoadData, updateData],
   );
+
+  const handlePdfAndImage = async () => {
+    flushSync(() => setIsPrint(true));
+    if (tableRef.current) {
+      try {
+        const canvas = await html2canvas(tableRef.current, {
+          scale: 3,
+          useCORS: true,
+          backgroundColor: null,
+          scrollX: 0,
+          scrollY: 0,
+          width: tableRef.current.clientWidth,
+          height: tableRef.current.clientHeight,
+        });
+
+        const imgData = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "table-screenshot.png";
+        link.click();
+
+        const pdf = new jsPDF("l", "mm", "a4");
+        const imgWidth = pdf.internal.pageSize.getWidth();
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        pdf.save("table-screenshot.pdf");
+      } catch (error) {
+        /* empty */
+      }
+    }
+    setIsPrint(false);
+  };
 
   const table = useReactTable({
     data,
@@ -155,54 +196,67 @@ const TableComponent: React.FC<TableComponentProps> = ({
   });
 
   return (
-    <styled.TableWrapper>
-      <table>
-        <thead>
-          <styled.SectionHeader
-            key={data[0]?.header || "default-key"}
-            contentEditable
-            suppressContentEditableWarning
-            onKeyDown={handleKeyDown}
-            onBlur={(e) => {
-              const cleanedText = getTextWithNewLines(
-                e.currentTarget.innerHTML,
-              );
-              updateData("header", cleanedText, false, false, 0);
-            }}
-          >
-            {renderTextWithLineBreaks(data[0]?.header || "")}
-          </styled.SectionHeader>
-        </thead>
+    <div>
+      <div>
+        <styled.TableWrapper ref={tableRef}>
+          <table>
+            <thead>
+              <styled.SectionHeader
+                key={data[0]?.header || "default-key"}
+                contentEditable
+                suppressContentEditableWarning
+                onKeyDown={handleKeyDown}
+                onBlur={(e) => {
+                  const cleanedText = getTextWithNewLines(
+                    e.currentTarget.innerHTML,
+                  );
+                  updateData("header", cleanedText, false, false, 0);
+                }}
+              >
+                {renderTextWithLineBreaks(data[0]?.header || "")}
+              </styled.SectionHeader>
+            </thead>
 
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
+            </tbody>
 
-        <footer>
-          <styled.Footer
-            contentEditable
-            suppressContentEditableWarning
-            onKeyDown={handleKeyDown}
-            onBlur={(e) => {
-              const cleanedText = getTextWithNewLines(
-                e.currentTarget.innerHTML,
-              );
-              updateData("footer", cleanedText, false, false);
-            }}
-          >
-            {renderTextWithLineBreaks(data[0]?.footer || "")}
-          </styled.Footer>
-        </footer>
-      </table>
-    </styled.TableWrapper>
+            <footer>
+              <styled.Footer
+                contentEditable
+                suppressContentEditableWarning
+                onKeyDown={handleKeyDown}
+                onBlur={(e) => {
+                  const cleanedText = getTextWithNewLines(
+                    e.currentTarget.innerHTML,
+                  );
+                  updateData("footer", cleanedText, false, false);
+                }}
+              >
+                {renderTextWithLineBreaks(data[0]?.footer || "")}
+              </styled.Footer>
+            </footer>
+          </table>
+        </styled.TableWrapper>
+      </div>
+      <button
+        onClick={handlePdfAndImage}
+        className="mt-4 p-2 bg-blue-500 text-white rounded-lg"
+      >
+        📸 צילום מסך
+      </button>
+    </div>
   );
 };
 
