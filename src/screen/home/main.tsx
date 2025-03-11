@@ -8,7 +8,7 @@ import type {
   TableProps,
   UpdateDataProps,
 } from "../../types/schedule";
-import { updateContent } from "../../utils/utils";
+import { updateContent } from "../../utils/updateContent";
 import { datePickerButtonStyles } from "./styles";
 
 const HomeScreen = () => {

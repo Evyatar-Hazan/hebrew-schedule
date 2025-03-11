@@ -13,7 +13,6 @@ export const updateContent = (
     if (i !== index) {
       return item;
     }
-
     if (
       isSubTable &&
       subTableRowIndex !== undefined &&
