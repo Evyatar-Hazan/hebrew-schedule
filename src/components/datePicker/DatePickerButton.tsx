@@ -1,11 +1,10 @@
-import "react-datepicker/dist/react-datepicker.css";
+import "react-day-picker/dist/style.css";
 
-import { he } from "date-fns/locale"; // ייבוא עברית
-import React, { useState } from "react";
-import DatePicker, { registerLocale } from "react-datepicker";
+import { he } from "date-fns/locale";
+import React, { useEffect, useState } from "react";
+import { DayPicker } from "react-day-picker";
 
-// רישום עברית כסביבה לשימוש
-registerLocale("he", he);
+import * as styled from "./styled";
 
 interface DatePickerButtonProps {
   onDateSelect: (date: string) => void;
@@ -16,28 +15,59 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   onDateSelect,
   selectedDates,
 }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date(),
+  );
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+  useEffect(() => {
+    if (selectedDates) {
+      setSelectedDate(new Date(selectedDates));
+    } else {
+      setSelectedDate(new Date());
+    }
+  }, [selectedDates]);
+
+  const handleDateChange = (date: Date | undefined) => {
     if (date) {
+      setSelectedDate(date);
+      setIsOpen(false);
       onDateSelect(date.toISOString().split("T")[0]);
+    } else {
+      setSelectedDate(undefined);
+    }
+  };
+
+  const closeModal = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      setIsOpen(false);
     }
   };
 
   return (
-    <div className="relative inline-block" dir="rtl" style={{ flex: 1 }}>
-      <DatePicker
-        selected={selectedDate}
-        onChange={handleDateChange}
-        dateFormat="dd/MM/yyyy"
-        placeholderText={
-          selectedDates !== undefined ? selectedDates : "📅 בחר תאריך"
-        }
-        locale="he"
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 cursor-pointer"
-      />
-    </div>
+    <styled.Container>
+      <styled.Button onClick={() => setIsOpen(true)}>
+        {selectedDates !== undefined ? selectedDates : "📅 בחר תאריך"}
+      </styled.Button>
+
+      {isOpen && (
+        <styled.ModalOverlay onClick={closeModal}>
+          <styled.ModalContent onClick={(e) => e.stopPropagation()}>
+            <DayPicker
+              selected={selectedDate}
+              onDayClick={handleDateChange}
+              locale={he}
+              mode="single"
+              dir="rtl"
+              captionLayout="dropdown"
+              fromYear={new Date().getFullYear()}
+              toYear={new Date().getFullYear() + 10}
+              showOutsideDays
+            />
+          </styled.ModalContent>
+        </styled.ModalOverlay>
+      )}
+    </styled.Container>
   );
 };
 
