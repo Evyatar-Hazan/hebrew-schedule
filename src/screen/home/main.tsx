@@ -8,6 +8,8 @@ import type {
   TableProps,
   UpdateDataProps,
 } from "../../types/schedule";
+import { updateContent } from "../../utils/utils";
+import { datePickerButtonStyles } from "./styles";
 
 const HomeScreen = () => {
   const [data, setData] = useState<TableProps["data"]>([]);
@@ -24,29 +26,15 @@ const HomeScreen = () => {
   ) => {
     if (isContent) {
       setContent((prevContent) =>
-        prevContent.map((item, i) => {
-          if (i !== index) {
-            return item;
-          }
-          if (
-            isSubTable &&
-            subTableRowIndex !== undefined &&
-            subTableKey !== undefined &&
-            subTableKey !== ""
-          ) {
-            if (id === "headerSubTable") {
-              item.subTable.columns[subTableRowIndex].accessor =
-                item.subTable.columns[subTableRowIndex].header === subTableKey
-                  ? newData
-                  : item.subTable.columns[subTableRowIndex].accessor;
-            } else {
-              item.subTable.rowData[subTableRowIndex][subTableKey] = newData;
-            }
-          } else {
-            (item as Record<string, unknown>)[id] = newData;
-          }
-          return item;
-        }),
+        updateContent(
+          prevContent,
+          id,
+          newData,
+          index !== undefined ? index : -1,
+          isSubTable,
+          subTableRowIndex,
+          subTableKey,
+        ),
       );
     } else {
       setData((prevData) =>
@@ -58,26 +46,21 @@ const HomeScreen = () => {
   };
 
   const loadData = async (date: string, index?: number) => {
-    const result = await getData(date);
-    result.selectDate = date;
-    setContent((prevContent) =>
-      index !== undefined
-        ? prevContent.map((item, i) => (i === index ? result : item))
-        : [...prevContent, result],
-    );
+    try {
+      const result = await getData(date);
+      result.selectDate = date;
+      setContent((prevContent) =>
+        index !== undefined
+          ? prevContent.map((item, i) => (i === index ? result : item))
+          : [...prevContent, result],
+      );
+    } catch (error) {
+      /* empty */
+    }
   };
 
   useEffect(() => {
-    const initializeData = () => {
-      setData([
-        {
-          header: "להצלחת הנדיב החפץ בעילום שמו",
-          content: content,
-          footer: "",
-        },
-      ]);
-    };
-    initializeData();
+    setData([{ header: "להצלחת הנדיב החפץ בעילום שמו", content, footer: "" }]);
   }, [content]);
 
   return (
@@ -89,10 +72,18 @@ const HomeScreen = () => {
           onLoadData={loadData}
         />
       )}
-      <DatePickerButton
-        key="new-date-picker-button"
-        onDateSelect={(newDates) => loadData(newDates)}
-      />
+      <div
+        style={
+          content.length > 0
+            ? (datePickerButtonStyles.withContent as React.CSSProperties)
+            : (datePickerButtonStyles.default as React.CSSProperties)
+        }
+      >
+        <DatePickerButton
+          key="new-date-picker-button"
+          onDateSelect={loadData}
+        />
+      </div>
     </>
   );
 };
