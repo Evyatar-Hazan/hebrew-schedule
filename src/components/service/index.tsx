@@ -29,7 +29,8 @@ const getData = async (date: string): Promise<ContentProps> => {
       haftarah,
     } = result;
     data = {
-      subTitle: `יום שישי עש"ק פרשת ${parasha}`,
+      subTitle: `יום שישי עש"ק פרשת`,
+      parasha: parasha ?? "",
       data: `${hebrewDate} \n${dafyomi} \n מפטירים בנביא ${haftarah}`,
       subTable: {
         columns: [
