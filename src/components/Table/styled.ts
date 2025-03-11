@@ -47,8 +47,6 @@ export const SectionHeader = styled.div`
   font-weight: bold;
   text-align: center;
   border: 2px solid black;
-  border-collapse: collapse;
-  white-space: pre-line;
 `;
 
 export const SubTitle = styled.div`
@@ -82,7 +80,8 @@ export const Footer = styled.div`
   font-weight: bold;
   text-align: center;
   border: 2px solid black;
-  font-size: 1.25rem;
+  border-collapse: collapse;
+  white-space: pre-line;
 `;
 
 export const SubFooter = styled.div`
