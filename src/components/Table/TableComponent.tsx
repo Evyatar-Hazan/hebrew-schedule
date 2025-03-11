@@ -221,8 +221,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
     <div>
       <div>
         <styled.TableWrapper ref={tableRef}>
-          <table>
-            <thead>
+          <tbody>
+            <td key={data[0]?.header || "default-key"} colSpan={columns.length}>
               <styled.SectionHeader
                 key={data[0]?.header || "default-key"}
                 contentEditable
@@ -237,24 +237,17 @@ const TableComponent: React.FC<TableComponentProps> = ({
               >
                 {renderTextWithLineBreaks(data[0]?.header || "")}
               </styled.SectionHeader>
-            </thead>
-
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-
-            <footer>
+            </td>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            <td key={data[0]?.footer || "default-key"} colSpan={columns.length}>
               <styled.Footer
                 key={data[0]?.footer || "default-key"}
                 contentEditable
@@ -269,8 +262,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
               >
                 {renderTextWithLineBreaks(data[0]?.footer || "")}
               </styled.Footer>
-            </footer>
-          </table>
+            </td>
+          </tbody>
         </styled.TableWrapper>
       </div>
       <button
