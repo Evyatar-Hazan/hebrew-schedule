@@ -32,7 +32,10 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
     if (date) {
       setSelectedDate(date);
       setIsOpen(false);
-      onDateSelect(date.toISOString().split("T")[0]);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      onDateSelect(`${year}-${month}-${day}`);
     } else {
       setSelectedDate(undefined);
     }
@@ -53,17 +56,19 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
       {isOpen && (
         <styled.ModalOverlay onClick={closeModal}>
           <styled.ModalContent onClick={(e) => e.stopPropagation()}>
-            <DayPicker
-              selected={selectedDate}
-              onDayClick={handleDateChange}
-              locale={he}
-              mode="single"
-              dir="rtl"
-              captionLayout="dropdown"
-              fromYear={new Date().getFullYear()}
-              toYear={new Date().getFullYear() + 10}
-              showOutsideDays
-            />
+            <styled.StyledDayPicker>
+              <DayPicker
+                selected={selectedDate ?? new Date()}
+                onDayClick={handleDateChange}
+                locale={he}
+                mode="single"
+                dir="rtl"
+                captionLayout="dropdown"
+                fromYear={new Date().getFullYear()}
+                toYear={new Date().getFullYear() + 10}
+                showOutsideDays
+              />
+            </styled.StyledDayPicker>
           </styled.ModalContent>
         </styled.ModalOverlay>
       )}

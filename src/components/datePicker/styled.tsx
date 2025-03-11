@@ -1,11 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  display: inline-block;
-  position: relative;
-  flex: 1;
-  direction: rtl;
-`;
+export const Container = styled.div``;
 
 export const Button = styled.button`
   padding: 0.75rem 1.5rem;
@@ -48,4 +43,27 @@ export const ModalContent = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+`;
+
+export const StyledDayPicker = styled.div`
+  .rdp-day {
+    cursor: pointer;
+  }
+
+  .rdp-day_selected {
+    font-weight: bold;
+  }
+
+  .rdp-day_outside {
+    font-weight: bold;
+  }
+
+  .rdp-day_today {
+    font-weight: bold;
+  }
+
+  .rdp-day button {
+    font-size: 1.2rem;
+    font-weight: initial;
+  }
 `;
