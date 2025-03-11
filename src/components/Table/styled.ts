@@ -52,6 +52,8 @@ export const SectionHeader = styled.div`
 `;
 
 export const SubTitle = styled.div`
+  display: flex;
+  flex-direction: column;
   font-size: 1.25rem;
   padding: 1rem;
   font-weight: 600;
@@ -59,7 +61,6 @@ export const SubTitle = styled.div`
   border: 2px solid black;
   cursor: pointer;
   word-wrap: break-word;
-  white-space: normal;
   white-space: pre-line;
 `;
 
@@ -102,3 +103,10 @@ export const StyledInput = styled.input<{ componentStyle: string }>`
 `;
 
 export const Input = styled.input``;
+
+export const SubTitleTitle = styled.text``;
+
+export const SubTitleText = styled.text`
+  gap: 10px;
+  font-size: 2.5rem;
+`;

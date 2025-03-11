@@ -26,6 +26,7 @@ export interface DaySchedule {
 
 export type ContentProps = {
   subTitle: string;
+  parasha: string;
   data: string;
   subTable: {
     columns: {

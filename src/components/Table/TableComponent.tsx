@@ -58,6 +58,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
               {content.map((contentItem, index) => {
                 const {
                   subTitle,
+                  parasha,
                   data: contentData,
                   subFooter,
                   selectDate,
@@ -70,21 +71,42 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       contentEditable
                       suppressContentEditableWarning
                       onKeyDown={handleKeyDown}
-                      onBlur={(e) => {
-                        const cleanedText = getTextWithNewLines(
-                          e.currentTarget.innerHTML,
-                        );
-                        updateData(
-                          "subTitle",
-                          cleanedText,
-                          false,
-                          true,
-                          index,
-                          row.index,
-                        );
-                      }}
                     >
-                      {renderTextWithLineBreaks(subTitle)}
+                      <styled.SubTitleTitle
+                        onBlur={(e) => {
+                          const cleanedText = getTextWithNewLines(
+                            e.currentTarget.innerHTML,
+                          );
+                          updateData(
+                            "subTitle",
+                            cleanedText,
+                            false,
+                            true,
+                            index,
+                            row.index,
+                          );
+                        }}
+                      >
+                        {renderTextWithLineBreaks(subTitle)}
+                      </styled.SubTitleTitle>
+                      <styled.SubTitleText
+                        onBlur={(e) => {
+                          const cleanedText = getTextWithNewLines(
+                            e.currentTarget.innerHTML,
+                          );
+                          updateData(
+                            "parasha",
+                            cleanedText,
+                            false,
+                            true,
+                            index,
+                            row.index,
+                          );
+                        }}
+                      >
+                        {" "}
+                        {renderTextWithLineBreaks(parasha)}
+                      </styled.SubTitleText>
                     </styled.SubTitle>
 
                     <styled.SubTitle
