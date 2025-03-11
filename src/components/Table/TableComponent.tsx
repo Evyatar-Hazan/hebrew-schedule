@@ -234,6 +234,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
             <footer>
               <styled.Footer
+                key={data[0]?.footer || "default-key"}
                 contentEditable
                 suppressContentEditableWarning
                 onKeyDown={handleKeyDown}
@@ -241,7 +242,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   const cleanedText = getTextWithNewLines(
                     e.currentTarget.innerHTML,
                   );
-                  updateData("footer", cleanedText, false, false);
+                  updateData("footer", cleanedText, false, false, 0);
                 }}
               >
                 {renderTextWithLineBreaks(data[0]?.footer || "")}
