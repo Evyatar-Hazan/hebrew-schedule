@@ -10,6 +10,14 @@ export interface ScheduleItem {
   time: TimeData;
 }
 
+export interface Data {
+  textData: string;
+  fontSize: string;
+  fontWeight: boolean;
+  marginTop: string;
+  marginButton: string;
+}
+
 export interface DaySchedule {
   date: string;
   parasha: string;
@@ -27,7 +35,8 @@ export interface DaySchedule {
 export type ContentProps = {
   subTitle: string;
   parasha: string;
-  data: string;
+  dataDate: string;
+  data: Data[];
   subTable: {
     columns: {
       header: string;
@@ -41,7 +50,7 @@ export type ContentProps = {
 
 export type UpdateDataProps = (
   id: string,
-  newData: string,
+  newData: string | Data[],
   isSubTable: boolean,
   isContent: boolean,
   index?: number,

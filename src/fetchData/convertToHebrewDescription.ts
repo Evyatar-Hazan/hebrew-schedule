@@ -25,6 +25,7 @@ const bookNamesMap: Record<string, string> = {
   Proverbs: "משלי",
   Job: "איוב",
   Kings: "מלכים",
+  Samuel: "שמואל",
 };
 
 const hebrewNumbers: string[] = [
@@ -106,7 +107,7 @@ function convertToHebrewText(haftarah: string): string {
         return `${bookHebrew} ${chapter1}:${verse1}–${verse2}`;
       }
 
-      return `${bookHebrew} ${chapter1}:${verse1}`;
+      return `(${bookHebrew} ${chapter1}:${verse1})`;
     },
   );
 }
@@ -115,25 +116,21 @@ function convertToHebrewDescription(data: HaftarahInfo): string {
   const sections: string[] = [];
 
   if (data.haftarah ?? "") {
-    sections.push(
-      `📖 הפטרה (אשכנז): ${convertToHebrewText(data.haftarah ?? "")}`,
-    );
+    // 📖 הפטרה (אשכנז):
+    sections.push(`(${convertToHebrewText(data.haftarah ?? "")})`);
   }
-  if (data.haftarah_sephardic ?? "") {
-    sections.push(
-      `📖 הפטרה (ספרדי): ${convertToHebrewText(data.haftarah_sephardic ?? "")}`,
-    );
-  }
-  if (data.haftarah_yemenite ?? "") {
-    sections.push(
-      `📖 הפטרה (תימני): ${convertToHebrewText(data.haftarah_yemenite ?? "")}`,
-    );
-  }
-  if (data.haftarah_chabad ?? "") {
-    sections.push(
-      `📖 הפטרה (חב"ד): ${convertToHebrewText(data.haftarah_chabad ?? "")}`,
-    );
-  }
+  // // 📖 הפטרה (ספרדי):
+  // if (data.haftarah_sephardic ?? "") {
+  //   sections.push(`${convertToHebrewText(data.haftarah_sephardic ?? "")}`);
+  // }
+  // // 📖 הפטרה (תימני):
+  // if (data.haftarah_yemenite ?? "") {
+  //   sections.push(`${convertToHebrewText(data.haftarah_yemenite ?? "")}`);
+  // }
+  // // 📖 הפטרה (חב"ד):
+  // if (data.haftarah_chabad ?? "") {
+  //   sections.push(`${convertToHebrewText(data.haftarah_chabad ?? "")}`);
+  // }
 
   return sections.join("\n");
 }
