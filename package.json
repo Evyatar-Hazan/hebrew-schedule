@@ -68,7 +68,8 @@
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": [
-      "eslint --fix",
+      "prettier --write",
+      "eslint --fix --max-warnings=0",
       "git add"
     ]
   }
