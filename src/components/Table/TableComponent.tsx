@@ -71,7 +71,6 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 const {
                   subTitle,
                   parasha,
-                  dataDate,
                   data: contentData,
                   subFooter,
                   selectDate,
