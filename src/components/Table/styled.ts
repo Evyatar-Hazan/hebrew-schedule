@@ -109,3 +109,16 @@ export const SubTitleText = styled.text`
   gap: 10px;
   font-size: 2.5rem;
 `;
+
+export const Text = styled.text<{
+  fontSize?: string;
+  fontWeight?: boolean;
+  marginTop?: string;
+  marginButton?: string;
+}>`
+  font-size: ${({ fontSize }) => `${fontSize ?? "1.5"}rem`};
+  font-weight: ${({ fontWeight }) =>
+    (fontWeight ?? false) ? "bold" : "normal"};
+  margin-top: ${({ marginTop }) => `${marginTop ?? "0"}px`};
+  margin-button: ${({ marginButton }) => `${marginButton ?? "0"}px`};
+`;

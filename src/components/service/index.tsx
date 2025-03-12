@@ -15,6 +15,12 @@ const getTime = (date: string | unknown) => {
   };
 };
 
+const dateFormatConverter = (date: string) => {
+  const [year, month, day] = date.split("-");
+  const formattedDate = `${year.slice(2)}.${parseInt(month)}.${parseInt(day)}`;
+  return formattedDate;
+};
+
 const getData = async (date: string): Promise<ContentProps> => {
   let data = {} as ContentProps;
   try {
@@ -31,7 +37,37 @@ const getData = async (date: string): Promise<ContentProps> => {
     data = {
       subTitle: `יום שישי עש"ק פרשת`,
       parasha: parasha ?? "",
-      data: `${hebrewDate} \n${dafyomi} \n מפטירים בנביא ${haftarah}`,
+      dataDate: `${hebrewDate} ${dateFormatConverter(date)}`,
+      data: [
+        {
+          textData: `${hebrewDate} ${dateFormatConverter(date)}`,
+          fontSize: "1.0",
+          fontWeight: false,
+          marginTop: "0",
+          marginButton: "0",
+        },
+        {
+          textData: `דף היומי ${dafyomi}`,
+          fontSize: "1.0",
+          fontWeight: false,
+          marginTop: "0",
+          marginButton: "0",
+        },
+        {
+          textData: `מפטירים בנביא`,
+          fontSize: "1.2",
+          fontWeight: false,
+          marginTop: "50",
+          marginButton: "0",
+        },
+        {
+          textData: `${haftarah}`,
+          fontSize: "1.2",
+          fontWeight: false,
+          marginTop: "0",
+          marginButton: "0",
+        },
+      ],
       subTable: {
         columns: [
           { header: "schedule", accessor: "לוח זמנים" },
@@ -40,10 +76,10 @@ const getData = async (date: string): Promise<ContentProps> => {
         ],
         rowData: [
           {
-            schedule: "סוף זמן קריאת שמע של שחרית",
+            schedule: "סוף זמן קריאת  \n שמע של שחרית",
             ...getTime(candleLighting),
           },
-          { schedule: "נעילת חניות עש״ק", ...getTime(storeLock) },
+          { schedule: "נעילת חנויות עש״ק", ...getTime(storeLock) },
           {
             schedule: "הדלקת נרות בערש״ק",
             ...getTime(candleLighting),

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import type { ColumnDef } from "@tanstack/react-table";
 import {
   flexRender,
@@ -10,33 +11,20 @@ import React, { useMemo, useRef } from "react";
 import { flushSync } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
 
-import type { TableComponentProps, TableProps } from "../../types/schedule";
+import type {
+  Data,
+  TableComponentProps,
+  TableProps,
+} from "../../types/schedule";
+import {
+  getTextWithNewLines,
+  handleKeyDown,
+  renderTextWithLineBreaks,
+} from "../../utils/handleTextWithNewLines";
 import DatePickerButton from "../datePicker/DatePickerButton";
 import * as styled from "./styled";
+import StyledTable from "./StyledTable";
 import SubTable from "./SubTable";
-
-const getTextWithNewLines = (html: string) =>
-  html
-    .replace(/<div>/g, "\n")
-    .replace(/<\/div>/g, "")
-    .replace(/<br>/g, "\n")
-    .replace(/&nbsp;/g, " ")
-    .trim();
-
-const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    document.execCommand("insertLineBreak");
-  }
-};
-
-const renderTextWithLineBreaks = (text: string) =>
-  text.split("\n").map((line) => (
-    <React.Fragment key={uuidv4()}>
-      {line}
-      <br />
-    </React.Fragment>
-  ));
 
 const TableComponent: React.FC<TableComponentProps> = ({
   data,
@@ -44,7 +32,31 @@ const TableComponent: React.FC<TableComponentProps> = ({
   onLoadData,
 }) => {
   const [isPrint, setIsPrint] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [modalData, setModalData] = React.useState<Data[]>([]);
+  const [cIndex, setCIndex] = React.useState<number>(0);
+  const [rowIndex, setRowIndex] = React.useState<number>(0);
   const tableRef = useRef<HTMLTableElement>(null);
+
+  const updateContentData = (
+    contentData: Data[],
+    index: number,
+    rowIndex_: number,
+  ) => {
+    updateData("data", contentData, false, true, index, rowIndex_);
+  };
+
+  const handleOpenModal = (
+    contentData: Data[],
+    index: number,
+    rowIndex_: number,
+  ) => {
+    setModalData(contentData);
+    setCIndex(index);
+    setRowIndex(rowIndex_);
+
+    setIsModalOpen(true);
+  };
 
   const columns = useMemo<ColumnDef<TableProps["data"][number]>[]>(
     () => [
@@ -59,6 +71,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 const {
                   subTitle,
                   parasha,
+                  dataDate,
                   data: contentData,
                   subFooter,
                   selectDate,
@@ -110,24 +123,29 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     </styled.SubTitle>
 
                     <styled.SubTitle
-                      contentEditable
-                      suppressContentEditableWarning
-                      onKeyDown={handleKeyDown}
-                      onBlur={(e) => {
-                        const cleanedText = getTextWithNewLines(
-                          e.currentTarget.innerHTML,
-                        );
-                        updateData(
-                          "data",
-                          cleanedText,
-                          false,
-                          true,
-                          index,
-                          row.index,
-                        );
-                      }}
+                      onClick={() =>
+                        handleOpenModal(contentData, index, row.index)
+                      }
                     >
-                      {renderTextWithLineBreaks(contentData)}
+                      {contentData.map(
+                        ({
+                          textData,
+                          fontSize,
+                          fontWeight,
+                          marginTop,
+                          marginButton,
+                        }) => (
+                          <styled.Text
+                            key={uuidv4()}
+                            fontSize={fontSize}
+                            fontWeight={fontWeight}
+                            marginTop={marginTop}
+                            marginButton={marginButton}
+                          >
+                            {renderTextWithLineBreaks(textData)}
+                          </styled.Text>
+                        ),
+                      )}
                     </styled.SubTitle>
 
                     <SubTable
@@ -222,22 +240,24 @@ const TableComponent: React.FC<TableComponentProps> = ({
       <div>
         <styled.TableWrapper ref={tableRef}>
           <tbody>
-            <td key={data[0]?.header || "default-key"} colSpan={columns.length}>
-              <styled.SectionHeader
-                key={data[0]?.header || "default-key"}
-                contentEditable
-                suppressContentEditableWarning
-                onKeyDown={handleKeyDown}
-                onBlur={(e) => {
-                  const cleanedText = getTextWithNewLines(
-                    e.currentTarget.innerHTML,
-                  );
-                  updateData("header", cleanedText, false, false, 0);
-                }}
-              >
-                {renderTextWithLineBreaks(data[0]?.header || "")}
-              </styled.SectionHeader>
-            </td>
+            <tr key={data[0]?.header || "default-key"}>
+              <td colSpan={columns.length}>
+                <styled.SectionHeader
+                  key={data[0]?.header || "default-key"}
+                  contentEditable
+                  suppressContentEditableWarning
+                  onKeyDown={handleKeyDown}
+                  onBlur={(e) => {
+                    const cleanedText = getTextWithNewLines(
+                      e.currentTarget.innerHTML,
+                    );
+                    updateData("header", cleanedText, false, false, 0);
+                  }}
+                >
+                  {renderTextWithLineBreaks(data[0]?.header || "")}
+                </styled.SectionHeader>
+              </td>
+            </tr>
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -266,6 +286,16 @@ const TableComponent: React.FC<TableComponentProps> = ({
           </tbody>
         </styled.TableWrapper>
       </div>
+      {isModalOpen && (
+        <StyledTable
+          data={modalData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          updateContentData={updateContentData}
+          cIndex={cIndex}
+          rowIndex={rowIndex}
+        />
+      )}
       <button
         onClick={handlePdfAndImage}
         className="mt-4 p-2 bg-blue-500 text-white rounded-lg"

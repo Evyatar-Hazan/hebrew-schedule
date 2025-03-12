@@ -39,7 +39,9 @@ const HomeScreen = () => {
     } else {
       setData((prevData) =>
         prevData.map((item, i) =>
-          i === index ? { ...item, [id]: newData } : item,
+          i === index
+            ? { ...item, [id]: newData as string | ContentProps[] }
+            : item,
         ),
       );
     }
