@@ -1,7 +1,7 @@
 import "react-day-picker/dist/style.css";
 
 import { he } from "date-fns/locale";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 
 import * as styled from "./styled";
@@ -21,7 +21,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (selectedDates) {
+    if (selectedDates !== undefined) {
       setSelectedDate(new Date(selectedDates));
     } else {
       setSelectedDate(new Date());
@@ -41,11 +41,11 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
     }
   };
 
-  const closeModal = (event: React.MouseEvent) => {
+  const closeModal = useCallback((event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
       setIsOpen(false);
     }
-  };
+  }, []);
 
   return (
     <styled.Container>

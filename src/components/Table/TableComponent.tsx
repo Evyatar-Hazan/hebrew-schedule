@@ -22,8 +22,8 @@ import {
   renderTextWithLineBreaks,
 } from "../../utils/handleTextWithNewLines";
 import DatePickerButton from "../datePicker/DatePickerButton";
+import StyledTable from "./ModalTable";
 import * as styled from "./styled";
-import StyledTable from "./StyledTable";
 import SubTable from "./SubTable";
 
 const TableComponent: React.FC<TableComponentProps> = ({
@@ -132,14 +132,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
                           fontSize,
                           fontWeight,
                           marginTop,
-                          marginButton,
+                          marginBottom,
                         }) => (
                           <styled.Text
                             key={uuidv4()}
                             fontSize={fontSize}
                             fontWeight={fontWeight}
                             marginTop={marginTop}
-                            marginButton={marginButton}
+                            marginBottom={marginBottom}
                           >
                             {renderTextWithLineBreaks(textData)}
                           </styled.Text>

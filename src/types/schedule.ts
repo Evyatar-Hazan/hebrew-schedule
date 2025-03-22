@@ -15,7 +15,7 @@ export interface Data {
   fontSize: string;
   fontWeight: boolean;
   marginTop: string;
-  marginButton: string;
+  marginBottom: string;
 }
 
 export interface DaySchedule {

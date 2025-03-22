@@ -1,7 +1,8 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import type { SubTableProps } from "../../types/schedule";
+import { handleKeyDown } from "../../utils/handleTextWithNewLines";
 import * as styled from "./styled";
 
 const SubTable: React.FC<SubTableProps> = ({
@@ -20,28 +21,44 @@ const SubTable: React.FC<SubTableProps> = ({
   });
 
   useEffect(() => {
-    const initialHeights: Record<number, number> = {};
-    table.getRowModel().rows.forEach((row, rowIndex) => {
-      initialHeights[rowIndex] =
-        document.getElementById(`row-${rowIndex}`)?.offsetHeight ?? 0;
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        const rowIndex = Number(entry.target.id.replace("row-", ""));
+        setRowHeights((prev) => ({
+          ...prev,
+          [rowIndex]: entry.contentRect.height,
+        }));
+      });
     });
-    setRowHeights(initialHeights);
-  }, [data, table]);
 
-  const handleCellBlur = (
-    rowIndex: number,
-    columnId: string,
-    value: string,
-    cell: HTMLTableCellElement,
-  ) => {
-    updateData("value", value, true, true, tableIndex, rowIndex, columnId);
+    table.getRowModel().rows.forEach((_, rowIndex) => {
+      const row = document.getElementById(`row-${rowIndex}`);
+      if (row) {
+        observer.observe(row);
+      }
+    });
 
-    const newHeight = cell.scrollHeight;
-    setRowHeights((prev) => ({
-      ...prev,
-      [rowIndex]: newHeight,
-    }));
-  };
+    return () => observer.disconnect();
+  }, [table]);
+
+  const handleCellBlur = useCallback(
+    (
+      rowIndex: number,
+      columnId: string,
+      value: string,
+      cell: HTMLTableCellElement,
+    ) => {
+      updateData("value", value, true, true, tableIndex, rowIndex, columnId);
+      const newHeight = cell.scrollHeight;
+      setRowHeights((prev) => {
+        if (prev[rowIndex] === newHeight) {
+          return prev;
+        }
+        return { ...prev, [rowIndex]: newHeight };
+      });
+    },
+    [updateData, tableIndex],
+  );
 
   const handleCellClick = (
     e: React.MouseEvent<HTMLTableCellElement>,
@@ -97,6 +114,7 @@ const SubTable: React.FC<SubTableProps> = ({
               <styled.TableCell
                 key={cell.id}
                 onClick={(e) => handleCellClick(e, rowIndex, cell.column.id)}
+                onKeyDown={(e) => handleKeyDown(e)}
               >
                 {row.original[cell.column.id]}
               </styled.TableCell>
