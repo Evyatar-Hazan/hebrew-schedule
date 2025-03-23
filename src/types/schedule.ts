@@ -1,5 +1,26 @@
 import type { ReactNode } from "react";
 
+export type StringNull = string | null;
+export interface Data_ {
+  hebrewDate: StringNull;
+  isShabbat: boolean;
+  holiday: StringNull;
+  parasha: StringNull;
+  candleLighting: string | { [key: string]: string } | null;
+  havdala: string | { [key: string]: string } | null;
+  dafyomi: string | { [key: string]: string } | null;
+  storeLock: string | { [key: string]: string } | null;
+  haftarah: string | { [key: string]: string } | null;
+  omerCount: StringNull;
+}
+
+export interface TimeItem {
+  hebrew: string;
+  category: string;
+  date: string;
+  leyning: { [key: string]: string | { [key: string]: string } };
+}
+
 export interface TimeData {
   hour: string;
   minute: string;
