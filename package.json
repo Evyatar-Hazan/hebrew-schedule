@@ -47,13 +47,13 @@
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": [
       "prettier --write",
-      "eslint --fix --max-warnings=0",
-      "git add"
+      "eslint --fix --max-warnings=0"
     ]
   },
   "devDependencies": {
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0"
   }
 }
