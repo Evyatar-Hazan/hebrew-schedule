@@ -1,4 +1,6 @@
 import { convertToHebrewDate } from "../../fetchData";
+import calculatePrayerEndTime from "../../fetchData/calculatePrayerEndTime";
+import { getSunTimes } from "../../fetchData/getSunTimes";
 import type { ContentProps } from "../../types/schedule";
 
 const getTime = (date: string | unknown) => {
@@ -32,8 +34,18 @@ const getData = async (date: string): Promise<ContentProps> => {
 
     const formattedDate = `${hebrewDate} ${dateFormatConverter(date)}`;
 
+    const latitude = 32.7951;
+    const longitude = 35.0867;
+
+    const shacharitEnd = await getSunTimes(date, latitude, longitude).then(
+      ({ sunrise, sunset }) => calculatePrayerEndTime(sunrise, sunset),
+    );
+
     const scheduleData = [
-      { schedule: "סוף זמן קריאת שמע של שחרית", time: getTime(candleLighting) },
+      {
+        schedule: "סוף זמן קריאת שמע של שחרית",
+        time: getTime(shacharitEnd.ShacharitEnd),
+      },
       { schedule: "נעילת חנויות עש״ק", time: getTime(storeLock) },
       { schedule: "הדלקת נרות בערש״ק", time: getTime(candleLighting) },
       { schedule: "זמן מוצאי שבת", time: getTime(havdala) },
