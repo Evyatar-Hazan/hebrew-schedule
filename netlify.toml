@@ -1,2 +1,2 @@
 [build]
-  command = "npm i --legacy-peer-deps && npm run build"
+  command = "npm run build"
