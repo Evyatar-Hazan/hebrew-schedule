@@ -1,46 +1,84 @@
-# Getting Started with Create React App
+# Hebrew Schedule - Kiryat Ata
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This website was developed to help my father in creating a monthly schedule of Jewish halachic times for Kiryat Ata. My father publishes a monthly schedule of halachic times, and to make his job easier, I built a website that allows him to select the dates he wants to get information about and print the schedule. The website is currently tailored specifically for the city of **Kiryat Ata**.
 
-## Available Scripts
+The website is built using **React** and **TypeScript**, and is hosted on **Netlify**.
 
-In the project directory, you can run:
+## Description
+The website displays information about halachic times (such as candle lighting, havdalah, parasha, daf yomi, etc.) based on a date selected by the user. Every time a user selects a date, the website will show the relevant information for that specific date and allow them to print it for distribution.
 
-### `npm start`
+The project was created to make it easier for my father, who needs to prepare and distribute the halachic schedule every month for Kiryat Ata. The website allows him to easily select the dates and retrieve the information automatically, instead of preparing the schedule manually.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Note:** Currently, the website is tailored for Kiryat Ata only.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Technologies Used:
+- **React**: A JavaScript library for building dynamic user interfaces.
+- **TypeScript**: A superset of JavaScript that adds static types for better code quality and easier debugging.
+- **Netlify**: A platform for hosting static websites.
 
-### `npm test`
+### Main Features:
+The user can select any date and see the following information:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Hebrew Date**: The Hebrew date for the selected day.
+- **Is Shabbat?**: A flag indicating whether the selected day is Shabbat.
+- **Holiday**: If the selected day is a Jewish holiday (e.g., Pesach, Sukkot, etc.).
+- **Parasha**: The parasha for the selected week.
+- **Candle Lighting**: The time for lighting the Shabbat candles.
+- **Havdalah**: The time for Havdalah at the end of Shabbat.
+- **Dafyomi**: The Daf Yomi for the day.
+- **Store Lock**: The time for store closures before Shabbat.
+- **Haftarah**: The Haftarah for the selected week.
+- **Omer Count**: The omer count, if relevant.
 
-### `npm run build`
+#### Example Data:
+```json
+{
+  "date": "2025-01-31",
+  "expected": {
+    "hebrewDate": "ב׳ בִּשְׁבָט תשפ״ה",
+    "isShabbat": false,
+    "holiday": null,
+    "parasha": "בֹּא",
+    "candleLighting": "2025-01-31T16:42:00+02:00",
+    "havdala": "2025-02-01T17:51:00+02:00",
+    "dafyomi": "סנהדרין דף מ״ה",
+    "storeLock": "2025-01-31T14:32:00.000Z",
+    "haftarah": "(ירמיהו מו:יג–כח)",
+    "omerCount": null
+  }
+}
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installation and Local Setup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+If you'd like to run the website locally, follow these steps:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+1. Clone the repository:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    ```bash
+    git clone https://github.com/Evyatar-Hazan/hebrew-schedule.git
+    ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Install dependencies: Install all the necessary dependencies for the React project:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    ```bash
+    npm install 
+    ```
+3. Start the local development server: After the installation, you can start the development server:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    ```bash
+    npm start 
+    ```
 
-## Learn More
+The website will be available at http://localhost:3000.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The website is hosted on Netlify, so there is no need to worry about setting up a server. The website is automatically deployed every time you push changes to the repository.
+
+To view the live website, visit: https://hebrew-schedule.netlify.app/.
+
+### Contributions
+
+If you'd like to contribute or improve the website, feel free to open issues or pull requests on GitHub with your suggestions or enhancements.
