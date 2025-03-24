@@ -15,7 +15,7 @@ const getTimesResponse = (
     (item: TimeItem) => item.category === "dafyomi" && item.date === date,
   );
   const haftarahItem = timesResponse.data.items.find(
-    (item: TimeItem) => item.category === "parashat" && item.date === date,
+    (item: TimeItem) => item.category === "parashat",
   );
 
   const candleLighting = candleItem ? candleItem.date : null;
