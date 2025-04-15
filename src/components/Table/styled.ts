@@ -80,9 +80,8 @@ export const Footer = styled.div`
 `;
 
 export const SubFooter = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   padding: 1rem;
-  font-weight: bold;
   text-align: center;
   ${commonStyles};
   white-space: pre-line;
