@@ -6,7 +6,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import React, { useMemo, useRef } from "react";
 import { flushSync } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -209,18 +208,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
           height: tableRef.current.clientHeight,
         });
 
-        const imgData = canvas.toDataURL("image/png");
+        const imgData = canvas.toDataURL("image/jpg");
         const link = document.createElement("a");
         link.href = imgData;
-        link.download = "table-screenshot.png";
+        link.download = "table-screenshot.jpg";
         link.click();
-
-        const pdf = new jsPDF("l", "mm", "a4");
-        const imgWidth = pdf.internal.pageSize.getWidth();
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-        pdf.save("table-screenshot.pdf");
       } catch (error) {
         /* empty */
       }
