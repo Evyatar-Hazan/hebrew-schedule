@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import pkg from "../../../package.json";
 import DatePickerButton from "../../components/datePicker/DatePickerButton";
 import getData from "../../components/service";
 import TableComponent from "../../components/Table/TableComponent";
@@ -10,6 +11,8 @@ import type {
 } from "../../types/schedule";
 import { updateContent } from "../../utils/updateContent";
 import { datePickerButtonStyles } from "./styles";
+
+const appVersion: string = pkg.version;
 
 const HomeScreen = () => {
   const [data, setData] = useState<TableProps["data"]>([]);
@@ -85,6 +88,9 @@ const HomeScreen = () => {
           key="new-date-picker-button"
           onDateSelect={loadData}
         />
+        <text style={datePickerButtonStyles.version as React.CSSProperties}>
+          {"גרסה: " + appVersion}
+        </text>
       </div>
     </>
   );
