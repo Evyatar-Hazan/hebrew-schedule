@@ -1,6 +1,7 @@
 export const datePickerButtonStyles = {
   default: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
@@ -9,6 +10,14 @@ export const datePickerButtonStyles = {
     zIndex: 50,
   },
   withContent: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  },
+  version: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
