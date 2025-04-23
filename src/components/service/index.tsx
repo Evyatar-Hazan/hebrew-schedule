@@ -16,7 +16,7 @@ const getTime = (date: string | unknown) => {
 
 const dateFormatConverter = (date: string) => {
   const [year, month, day] = date.split("-");
-  return `${year.slice(2)}.${parseInt(month)}.${parseInt(day)}`;
+  return `${parseInt(day)}.${parseInt(month)}.${year.slice(2)}`;
 };
 
 const getData = async (date: string): Promise<ContentProps> => {
