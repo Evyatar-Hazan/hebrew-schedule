@@ -8,9 +8,11 @@ const getTime = (date: string | unknown) => {
     return { minutes: "00", hours: "00" };
   }
   const d = new Date(date);
+  let hours = d.getHours() % 12;
+  hours = hours === 0 ? 12 : hours;
   return {
     minutes: d.getMinutes().toString().padStart(2, "0"),
-    hours: d.getHours().toString().padStart(2, "0"),
+    hours: hours.toString(),
   };
 };
 
