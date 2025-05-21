@@ -131,7 +131,7 @@ const NestedTable: React.FC<NestedTableProps> = ({
                     const match = row.match(regex);
                     if (match) {
                       if (isPrint) {
-                        return;
+                        return null;
                       }
                       return (
                         <Td key={`${colIndex}-${rowIndex}`}>
