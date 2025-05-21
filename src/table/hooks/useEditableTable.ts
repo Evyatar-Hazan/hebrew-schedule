@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import _data from "../mocData/data.json";
 import getData from "../service/";
 import type {
   ChangeType,
