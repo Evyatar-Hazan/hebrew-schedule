@@ -3,21 +3,24 @@ import styled from "styled-components";
 export const Container = styled.div``;
 
 export const Button = styled.button`
-  padding: 0.75rem 1.5rem;
-  color: black;
-  font-size: 16px;
-  border-radius: 0.5rem;
-  transition:
-    background-color 0.3s,
-    transform 0.2s;
+  background-color: #4f46e5;
+  color: #ffffff;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 999px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-2px);
+    background-color: #4338ca;
+    transform: translateY(-1px);
   }
 
-  &:focus {
-    outline: none;
+  &:active {
+    transform: translateY(1px);
   }
 `;
 
