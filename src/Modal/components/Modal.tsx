@@ -1,35 +1,31 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import type { Data } from "../../types/schedule";
+import { Th } from "../../table/styles/styles";
+import type { Data } from "../../table/types/types";
 import {
   getTextWithNewLines,
   handleKeyDown,
-  renderTextWithLineBreaks,
 } from "../../utils/handleTextWithNewLines";
-import * as styled from "./styled";
+import {
+  Button,
+  Input,
+  ModalBackground,
+  ModalContent,
+  Select,
+  Table,
+  Td,
+} from "../styles/styles";
 
-interface StyledTableProps {
+type StyledTableProps = {
   data: Data[];
-  isModalOpen: boolean;
-  setIsModalOpen: (val: boolean) => void;
-  updateContentData: (
-    contentData: Data[],
-    index: number,
-    rowIndex: number,
-  ) => void;
-  cIndex: number;
-  rowIndex: number;
-}
 
-const ModalTable: React.FC<StyledTableProps> = ({
-  data,
-  isModalOpen,
-  setIsModalOpen,
-  updateContentData,
-  cIndex,
-  rowIndex,
-}) => {
+  onClose: () => void;
+
+  onSave: (updatedData: Data[]) => void;
+};
+
+const ModalTable: React.FC<StyledTableProps> = ({ data, onClose, onSave }) => {
   const [localData, setLocalData] = useState<Data[]>(data);
 
   const updateData = (index: number, newData: Partial<Data>) => {
@@ -60,19 +56,10 @@ const ModalTable: React.FC<StyledTableProps> = ({
     });
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    updateContentData(localData, cIndex, rowIndex);
-  };
-
-  if (!isModalOpen) {
-    return null;
-  }
-
   return (
-    <styled.ModalBackground onClick={handleModalClose}>
-      <styled.ModalContent onClick={(e) => e.stopPropagation()}>
-        <styled.Table>
+    <ModalBackground onClick={onClose}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
+        <Table>
           <thead>
             <tr>
               {[
@@ -83,14 +70,14 @@ const ModalTable: React.FC<StyledTableProps> = ({
                 "מודגש",
                 "פעולות",
               ].map((header) => (
-                <styled.Th key={header}>{header}</styled.Th>
+                <Th key={header}>{header}</Th>
               ))}
             </tr>
           </thead>
           <tbody>
             {localData.map((item, index) => (
               <tr key={uuidv4()}>
-                <styled.Td
+                <Td
                   contentEditable
                   suppressContentEditableWarning
                   onKeyDown={handleKeyDown}
@@ -100,25 +87,25 @@ const ModalTable: React.FC<StyledTableProps> = ({
                     })
                   }
                 >
-                  {renderTextWithLineBreaks(item.textData)}
-                </styled.Td>
+                  {item.textData}
+                </Td>
                 {[
                   { key: "fontSize", type: "number", min: "0.1", step: "0.1" },
                   { key: "marginTop", type: "number", min: "0" },
                   { key: "marginBottom", type: "number", min: "0" },
                 ].map(({ key, ...props }) => (
-                  <styled.Td key={key}>
-                    <styled.Input
+                  <Td key={key}>
+                    <Input
                       {...props}
                       value={item[key as keyof Data] as string | number}
                       onChange={(e) =>
                         updateData(index, { [key]: e.target.value })
                       }
                     />
-                  </styled.Td>
+                  </Td>
                 ))}
-                <styled.Td>
-                  <styled.Select
+                <Td>
+                  <Select
                     value={item.fontWeight ? "true" : "false"}
                     onChange={(e) =>
                       updateData(index, {
@@ -128,22 +115,28 @@ const ModalTable: React.FC<StyledTableProps> = ({
                   >
                     <option value="true">כן</option>
                     <option value="false">לא</option>
-                  </styled.Select>
-                </styled.Td>
-                <styled.Td>
-                  <styled.Button onClick={() => deleteItem(index)}>
-                    מחיקה
-                  </styled.Button>
-                  <styled.Button onClick={() => addNewItem(index)}>
-                    +
-                  </styled.Button>
-                </styled.Td>
+                  </Select>
+                </Td>
+                <Td>
+                  <Button onClick={() => deleteItem(index)}>מחיקה</Button>
+                  <Button onClick={() => addNewItem(index)}>+</Button>
+                </Td>
               </tr>
             ))}
           </tbody>
-        </styled.Table>
-      </styled.ModalContent>
-    </styled.ModalBackground>
+        </Table>
+
+        {/* כפתורי סגירה ושמירה */}
+        <div
+          style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}
+        >
+          <Button onClick={onClose} style={{ marginLeft: 8 }}>
+            ביטול
+          </Button>
+          <Button onClick={() => onSave(localData)}>שמירה</Button>
+        </div>
+      </ModalContent>
+    </ModalBackground>
   );
 };
 
